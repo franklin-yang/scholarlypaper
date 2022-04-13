@@ -1,0 +1,136 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[11pt]{article}
+
+% Remove the "review" option to generate the final version.
+
+\usepackage{style/emnlp2021}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+
+
+\renewcommand{\UrlFont}{\ttfamily\small}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{varwidth}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{ {../figures/} }
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{mdwlist}
+\usepackage{csquotes}
+
+\setlist{nosep}
+
+\newcommand{\ms}[1]{{\color{magenta} {\em MS: #1}}} 
+\newcommand{\am}[1]{{\color{blue} {\em AM: #1}}} 
+\newcommand{\njr}[1]{{\color{red} {\em NJR: #1}}} 
+
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{Eliciting Bias in Question Answering Models through Ambiguity}
+\author{Andrew Mao \\
+	University of Maryland \\
+	\texttt{amao1@umd.edu} \\\And
+	Naveen Raman \\
+	University of Maryland \\
+	\texttt{nraman1@umd.edu} \\\And
+	Matthew Shu \\
+	Yale University \\
+	\texttt{matthew.shu@yale.edu} \\\AND
+	Eric Li \\
+	University of Maryland \\
+	\texttt{lieric@umd.edu} \\\And
+	Franklin Yang\\
+	University of Maryland \\
+	\texttt{flatearf@umd.edu} \\\And
+	Jordan Boyd-Graber \\
+	University of Maryland\\
+	\texttt{jbg@umiacs.umd.edu} \\}
+
+\date{}
+
+%\newif\ifcomment\commenttrue
+\newif\ifcomment\commentfalse
+\input{style/preamble}
+
+\usepackage[normalem]{ulem}
+
+\newcommand{\avgfone}{\abr{Avg}~$\textsc{F}_1$}
+\newcommand{\coref}{\abr{cr}}
+\newcommand{\icoref}{\abr{ic{\small oref}}}
+\newcommand{\spanbert}{\abr{s{\small pan}bert}}
+\newcommand{\spanbertlarge}{\spanbert-\textsc{\small large}-\textsc{\small cased}}
+\newcommand{\ctof}{\abr{c{\small 2}f-coref}}
+\newcommand{\ontonotes}{\abr{o{\small nto}n{\small otes}}}
+\newcommand{\preco}{\abr{p{\small re}c{\small o}}}
+\newcommand{\qbcoref}{\abr{qbc{\small oref}}}
+
+\newcommand{\latexfile}[1]{\input{2021_emnlp_bias/sections/#1}}
+\newcommand{\figfile}[1]{2021_emnlp_bias/figures/#1}
+\newcommand{\autofig}[1]{2021_emnlp_bias/auto_fig/#1}
+\newcommand{\al}{\abr{al}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\hl}[1]{\colorbox{yellow}{#1}}
+\newcommand{\hz}{\vphantom{\parbox[c]{0.1cm}{\rule{0.1cm}{0.4cm}}}}
+\setlength\fboxsep{0pt}
+\newcommand{\given}{\, | \,}
+\newcommand{\gold}[1]{\abr{gold}(#1)}
+\newcommand{\ent}[1]{\text{H}_{\text{#1}}}
+
+\newtheorem{theorem}{Proposition}
+
+
+\begin{document}
+	\maketitle
+	\latexfile{00-abstract}
+	\latexfile{10-intro}
+	\latexfile{30-social}
+	\latexfile{40-problem}
+	\latexfile{50-metrics}
+	\latexfile{60-experiments}
+	\latexfile{20-related}
+	\latexfile{70-discussion}
+	\latexfile{80-conclusion}
+	%\latexfile{90-acknowledgements}
+	
+	\clearpage
+	\pagebreak 
+	\bibliography{bib/naveen, bib/bias}
+	\bibliographystyle{style/acl_natbib}
+
+	
+\end{document}

@@ -1,0 +1,52 @@
+\clearpage
+\appendix
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.5]{\figfile{training plots.png}}
+	\caption{We plot F1 and exact match scores for various LSTM and BiDAF models and find that only LSTM models with multiple layers and attention were able to beat the simpler BiDAF model.}
+\end{figure*}
+
+\section{Project Review}
+In this section, we present a summary of each author's contribution, challenges encountered, failed approaches, and approaches we wanted to try. We also include statistical tests on results from DPR and DPR+BERT on ambiguous questions.
+\subsection{Contributions}
+All authors contributed to the report, slides, and presentation. \\
+\textbf{Eric Li} - Developed LSTM model; ran experiments with LSTMs on ambiguous questions; revised report \\ 
+\textbf{Andrew Mao} - Developed LSTM, BiDAF, and DPR. Wrote evaluation scripts for restricted ambiguity questions, investigated gender balancing, analyzed unrestricted ambiguity questions. \\ 
+\textbf{Naveen Raman} - Social science behind ambiguity, developed restricted, unrestricted ambiguity questions, and wrote up the report. \\ 
+\textbf{Franklin Yang} - Developed/evaluated BERT, ran experiments, edited final presentation video
+\subsection{Challenges Encountered}
+\textbf{Difficulty in Scraping Wikipedia} - We had some trouble cleaning up Wikipedia scrapes to get lists of poly-eponymous experiments, needing to remove things like LaTeX equations for example.  \\
+\textbf{Defining and Measuring Bias} - Because of the many definitions and types of bias, we had difficulty selecting what to focus on. While we chose gender bias because of its popularity, there were other types of bias we could have focused on, including racial bias and religious bias, in addition to focusing on non-binary gender bias.  \\
+\textbf{Running and Implementing LSTMs} - We tried to run existing implementations of Match-LSTM \cite{matchlstm}. After encountering issues, we designed and trained our custom LSTMs using PyTorch \cite{pytorch} layers and boilerplate code \cite{chrischute}.
+\subsection{Failed Approaches}
+\textbf{Bias Elicitation Through Gender-Biased Limited Ambiguity Questions} - Our initial limited ambiguity dataset was skewed heavily toward males, making it difficult to generate results of any statistical significance. 
+After realizing the problem, we decided to replace names randomly with male or female names to generate a semi-artificial gender-biased dataset (more details in Section \ref{sec:bias}). \\
+\textbf{Obfuscated Limited Ambiguity Questions} - We tried to reword limited ambiguity questions to make them more challenging for the QA system, so instead of asking "Who discovered the Biot-Savart law", we asked, "Who discovered the law where an electric current induces a magnetic field." 
+However, when doing this, we found that models had trouble answering this, and many times, just responded with the name of the entity rather than the eponyms. 
+
+\subsection{Approaches We Wanted to Try} 
+\textbf{Alternative unrestricted ambiguity questions} - For ambiguous questions, there are many variations of questions we didn't try, such as adding nationality (``Who is a famous Polish author") or negating the premise (``Who can never be a famous [occupation]").
+We also could have analyzed the responses for other protected groups, such as nationality or religion. \\ 
+\textbf{Investigation of confidence scores} - For experiments on UnQover, while the models often abstained, we could have investigated the confidence scores for male or female names. \\ 
+\textbf{Incorporation of retriever models with reader models} - We had only investigated BERT as the reader, but not LSTM and BiDAF. We did not pursue this direction as previous experiments did not show bias in these models\\
+\textbf{Baseline for occupation frequencies} - We did not find a baseline for gender frequencies across occupations. This would have allowed us to test the retriever results for bias. We could obtain this information by scraping and extracting occupations from Wikipedia, Wikidata, or labor statistics.
+
+\section{LSTM Model Details}
+\label{sec:ablation}
+\begin{enumerate}
+	\item \textbf{1 layer bidirectional LSTM} - We run it on the context tokens and take the hidden states to create contextual embeddings. We then run it on the question and take the last hidden state to create a question encoding. Then we concatenate the question with each context vector and pass it through logistic regression (linear layer followed by a softmax).
+	\item \textbf{1 layer biLSTM with attention} - Same as (1), but after creating contextual embeddings, we compute an attention vector \cite{weston2014memory, kadlec2016text} with the question (intuitively finding the similarity between the question and each context word) then scale each context embedding by the attention weights. This ``refined context" is passed to the linear layer. This ``attentive reader" architecture was inspired by previous work \cite{chen2016thorough, chen2017reading}.
+	\item \textbf{3 layer biLSTM with attention} - Same as (1), but with a second 2-layer biLSTM following the attention step. This ``refining" step was inspired by the modeling layer of BiDAF \cite{seo2016bidirectional}.
+\end{enumerate}
+
+\section{Model training parameters}
+For LSTM and BiDAF, we use the following hyperparameters: learning rate: 0.5, optimizer: Adadelta~\cite{zeiler2012adadelta}, dropout rate: 0.2 (all layers); we clip gradients with norm greater than 5. Training was done on a single GeForce GTX 1080 with 12GB memory on RHEL Linux.
+For BERT, we used the default hyperparameters. 
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+\section{Related Work}
+\label{sec:related}
+
+% Outline/Points to Cover
+% * Representational Bias
+% * Bias in NLP/Question Answering
+%   * Internet search, 'debiasing'/actively countering
+%   * Image search
+
+
+We provide a brief overview of prior work in bias, both in NLP and question answering (QA), along with a description of the negative effects of bias.
+
+\subsection{Data, Models, and the Refraction of Inequality}
+\label{sec:refraction}
+Machine learning models are part of a societal transition from between-human interactions to those between humans and machines.
+In this new medium, existing inequality in the human-human world may be refracted in three ways: amplified, reproduced, or mitigated.
+We borrow this refraction framework from sociology of education research investigating how schools affect pre-existing inequality in the outside world~\citep{downeyFiftyYearsColeman2016}.
+Like schools, models can perpetuate two types of identity-based harm~\citep{sureshFrameworkUnderstandingSources2021}: allocative harms, where people are denied opportunities and resources, and representational harms, where stereotypes and stigma negatively influence behavior~\citep{barocasFairnessMachineLearning2019}.
+Bias affects applications ranging from sentiment analysis~
+\citep{thelwall2018gender} to language models~\citep{bordia2019identifying}, and many times originates from upstream sources such as word embeddings~\citep{garrido2021survey,manzini2019black}. 
+Prior work reduced gender bias in word embeddings by moving bias to a single dimension~\citep{bolukbasi2016man} which can also be generalized to multi-class settings, such as multiple races or genders~\citep{manzini2019black}. 
+Additionally, models rely on data to train on and existing work has shown that Wikipedia, a commonly used training dataset differ in their characterization of differently gendered people ~\cite{10.1145/2700171.2791036}.  Offline, work has shown the impact of gender stereotypes in children's literature as a tool to strengthen traditional patriarchal values ~\cite{karami2020gender}.  
+\subsection{Question Answering}
+ Question answering (QA) models' answers can reproduce, counter, or even exacerbate observed representational harms ~\citep{nobleAlgorithmsOppressionHow2018}.
+\citep{helmBlackTeensGoogle2016} observed that the generic query ``three [White/Black/Asian] teenagers'' brought up different kinds of images on Google: smiling teens selling bibles (White), mug shots (Black), and scantily-clad girls (Asian)~\citep{benjaminRaceTechnologyAbolitionist2019}.  QA is also the core task used in numerous educational contexts, such as standardized testing and even in determining employments opportunities, such as in the case of the Armed Services Vocational Aptitude Battery (ASVAB).
+We build on prior work employing similar underspecified questions to detect stereotyping~\cite{li2020unqovering}.
+Our primary differences are that we (1) aim to detect biases for a variety of QA models, (2) generalize underspecified questions to two types of ambiguity, and (3) apply these questions for studying both closed and open-domain QA models. 
+
+While prior work has shown that some QA models are unbiased along gender or race lines, meaning accuracy is no different for people of different demographics, QA datasets themselves have skewed gender and race distributions~\cite{gor2021towards}. 
+Within the subfield of visual question answering, where questions are accompanied with an image for context, ignoring statistical regularities in questions and relying on both image and text modalities allows for a reduction in gender bias~\cite{cadene2019rubi}.

@@ -1,0 +1,15 @@
+\begin{abstract}
+% 	Question answering (QA) models use retriever and reader systems to answer questions, however, reliance on training data by QA systems can amplify or reflect inequity through their responses.
+Deep learning models have shown great success in question answering (QA), however, existing work has shown bias in the form of differing accuracy rates based on gender.
+% 	Many QA models, such as those for the SQuAD dataset, are trained and tested on a subset of Wikipedia articles which encode their own biases and also reproduce real-world inequality.
+% 	Understanding how training data affects bias in QA systems can inform methods to mitigate inequity. 
+% 	To understand bias in QA systems, we develop two sets of questions for closed and open domain questions respectively, which use ambiguous questions to probe QA models for bias.
+To probe for bias in QA systems, we create two benchmarks for closed and open domain question answering, consisting of ambiguous questions and bias metrics.  Ambiguous questions are those that can have multiple valid distinct answers for which we use recall rate to measure bias, while using chi-square and fisher's exact test to quantify the disparity in gender distribution returned by retrievers.
+\mscomment{two sets of ambiguous questions for closed...to probe QA models for bias? Or should respectively be each?}
+We use these benchmarks with four QA models and find that open-domain QA models amplify biases more than their closed-domain counterparts, potentially due to the freedom of the retriever.
+We make our questions and tests publicly available to promote further evaluations of bias in QA systems~\footnote{We make our code publicly available at \url{https://github.com/axz5fy3e6fq07q13/emnlp_bias}}. 
+	
+\end{abstract}
+
+
+

@@ -1,0 +1,29 @@
+\section{Introduction}
+\label{introduction}
+Question answering (QA) systems use reader and retriever models to learn and parse information from knowledge bases such as Wikipedia.
+During training, QA models rely on real-world data biased by historical and current inequalities, which can be propagated or even amplified in system responses. ~\cite{IJoC777}
+For example, historical inequities have led to the majority of computer science students being male, which could lead QA models to assume that all computer science students are male. ~\cite{10.1145/792548.611930}
+This can harm end-users by perpetuating exclusionary messages about who belongs in the profession.
+Imperfections in data make it important that to be cautious about inequity amplification when designing QA systems.
+
+Conceptualizations of ``bias'' and its consequences vary among studies and contexts~\citep{blodgett2020language}.
+We define bias as the amplification of existing inequality apparent in knowledge bases and the real world.
+This may be through exacerbating empirically-observed inequality, e.g., by providing a list of 90\% males in an occupation that is 80\% male, or when systems transfer learned inequality into scenarios with little information, e.g., a model is given irrelevant context about Jack and Jill and is asked who is a bad driver~\cite{li2020unqovering}.  In the latter case, we condition only on context, not the full question answering pipeline. 
+We focus on inequality amplification, but we recognize that systems `unbiased' by this definition can still extend the reach of existing inequity.
+To mitigate past inequity, we must move beyond `crass empiricism' to design systems reflecting our ideals rather than our unequal reality~\citep{fryHelloWorldBeing2018}.
+We formalize this interpretation of bias in our problem statement (Section~\ref{sec:problem_statement}).
+
+Prior question answering work studied differences in accuracy based on gender but examined only accuracy rates ~\cite{gor2021towards} and did not examine the entire question answering pipeline ~\cite{li2020unqovering}.  We build on this by developing two new benchmarks for bias, using questions with multiple answers to reveal model biases, such as asking "Who founded company X?" where X is a company with multiple co-founders.
+We build upon social science studies showing how ambiguous questions can elicit internal information from subjects~\citep{dunning1989ambiguity}. 
+% We use a similar idea to probe QA models through ambiguous questions to discover bias. 
+% We develop metrics for bias in open and closed domain QA models; for closed domain metrics, we target bias at the reader level, while for open-domain metrics, we aim to detect bias in machine readers and retriever systems used to answer questions in open-domain QA. 
+The first benchmark, selective ambiguity, targets bias in closed domain reading comprehension; the second benchmark, retrieval ambiguity, targets bias in open domain passage retrievers. 
+Instead of only examining the reader as is done in the UNQOVER study, we also target bias at the retriever to more thoroughly evaluate bias. 
+% We apply our benchmarks to a set of reading comprehension models trained on SQuAD and analyze how bias varies by model and metrics. 
+% We additionally analyze bias in the DPR retriever system using our model 
+We apply our benchmarks to a set of neural models including BERT~\cite{devlin2018bert} and DPR~\cite{karpukhin2020dense}, test for gender bias, and conclude with a discussion of bias mitigation. 
+
+Our contributions are as follows.
+We (1) develop a set of bias benchmarks for use on closed and open domain question answering systems, (2) analyze three QA models on the SQuAD dataset using these benchmarks, and (3) analyze the propagation of bias at the retriever and reader levels. 
+
+

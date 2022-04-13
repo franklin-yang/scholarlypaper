@@ -1,0 +1,56 @@
+\section{Bias Benchmarks}
+\label{sec:bias}
+We develop two benchmarks to probe for bias; each consists of (1) a set of ambiguous questions automatically generated from templates/scraped data; and (2) an evaluation metric which measures the degree of bias of a model's responses. The selectional ambiguity benchmark targets reading comprehension models, and the retrieval ambiguity benchmark targets passage retriever models. 
+% Each benchmark consists of a set of ambiguous questions, which may contain multiple answers, and uses the output of the QA system to discern the presence of bias.
+
+\subsection{Selectional Ambiguity}
+\mscomment{hyphenate or don't hyphenate closed/open domain}
+In the reading comprehension task, questions with selectional ambiguity have multiple possible answers in the context.
+% We develop a closed domain test for bias based on selectional ambiguity and calculate bias based on system recall, which looks at how many of the correct answers are retrieved. 
+Our questions use poly-eponymous discoveries, which are named for more than one person. An example question is ``Who discovered the Haber-Bosch process,'' where multiple potential answers ``Fritz Haber'' and ``Carl Bosch.'' can be found in the context.
+While the before questions more closely resemble the Cranfield philosophy (as they represent questions that are more likely to be asked by users), we also investigate bias using questions more aligned to the Manchester perspective by rewording the question to ask ``Who discovered the law that ...'' followed by a description of the law \cite{rodriguez-boyd-graber-2021-evaluation}.  For example, Haber-Bosch question to "Who discovered an artificial nitrogen fixation process that is the main industrial procedure for the production of ammonia today?".  The law descriptions are generated from the relevant Wikipedia articles' first paragraphs.
+Our goal is to see whether QA systems retrieve entities for particular demographics more often than others. We calculate a model's bias based on the difference in recall rate for each protected group.  Intuitively, for each protected group, we want to know what percentage of each class is returned by the QA system.
+% number of correct model answers in p_i / number of ground truth answers in p_i
+Formally, given a set of protected groups ${p_i}$, we compute $Recall(p_i) =$
+\begin{align*}
+\frac{|\{f(q_j,c_j): f(q_j,c_j)=a_j, p(f(q_j,c_j))=p_i\}|}{|\{a_j: p(a_j)=p_i\}|}
+\end{align*}
+
+% details
+We retrieve poly-eponymous discoveries from the Wikipedia pages ``List of scientific laws named after people'' and ``Scientific phenomena named after people'', develop questions based on these entities, and use the opening paragraph of the entity's Wikipedia page as context. 
+We test for differences in the recall rates between male and female eponyms using a chi-squared test. 
+Using Wikidata, we determine the gender distribution of the names to be 550 males to 4 females. 
+Because this gender skew would negate any statistical significance, we randomly replaced names to ensure an equal distribution of male and female eponyms, selecting names from the ``names'' library~\cite{pythonnames}. For example, the context "It is named after its inventors, the German chemists Fritz Haber and Carl Bosch, who developed it in the first decade of the 20th century. " might be modified to "It is named after its inventors, the German chemists Fritz Haber and Sally Bosch, who developed it in the first decade of the 20th century. "
+We assume a binary view of gender due to simplicity, but acknowledge that this is an oversimplification of a nuanced concept~\cite{larson2017gender,bamman2014gender}. 
+
+
+\subsection{Retrieval Ambiguity}
+We give open-ended questions to a passage retriever to see if its passages are overly biased towards a certain demographic.
+% We develop an open-domain QA metric based on retrieval ambiguity to explore bias in articles retrieved for context. 
+We use a list of occupations from the UNQOVER  ~\citep{li2020unqovering} and QANTA datasets~\cite{rodriguez2019quizbowl} and ask open-ended questions of the form ``Who was an engineer?'' and ``Who was an English author?``
+We count the frequency of genders for the titles of the top 100 passages retrieved, and compare the distribution to the baseline gender distributions of biographies in Wikipedia using a chi-squared test. Formally, given a set of protected groups ${p_i}$, we compute
+\begin{gather*}
+count(p_i) = \sum_{j=1}^{n}{G(q_j)} \\
+G(q_j) = |\{g(q_j)_k: p(title(g(q_j)))=p_i\}|_{k=1...100}
+\end{gather*}
+Wikipedia already contains significantly more men than women, so retriever models should, at a minimum, not exacerbate this disparity. 
+A skewed distribution will not always be due to bias--asking ``Who is an NBA player'' will return all males, and analogously for ``Who is a WNBA player.''
+However, this metric can be used as an exploratory tool to investigate representational biases. 
+We also measure bias propagation from retriever to reader systems by using the output of the retriever as context for a QA model, selecting the answer with the highest confidence over the 100 articles. 
+We measure the gender distribution of these outputs against the baseline gender distribution on Wikipedia to measure bias, as well as the gender distribution returned by Wikidata when querying with the occupation or occupation and nationality combination. 
+We additionally compare the gender distribution of occupations and nationalities of entities found in the QANTA dataset \cite{iyyer-etal-2014-neural} with the gender distribution of entities returned by a retriever. 
+\begin{table*}[]
+	\begin{tabular}{llll}
+		
+		Question type && Example                                                                                                                                                                                  & Quantity \\ \hline
+		Selectional Ambiguity&  (Manchester)  & \begin{tabular}[c]{@{}l@{}}Q: Who discovered the Biot-Savart law?\\ A: Jean-Baptiste Biot and Felix Savart\end{tabular} & 256                 \\ 
+		 & (Cranfield)  & \begin{tabular}[c]{@{}l@{}}Q: Who discovered an equation describing the \\magnetic field generated by a constant electric current?\\ A: Jean-Baptiste Biot and Felix Savart\end{tabular} & 256                 \\ 
+		Retrieval Ambiguity  & & \begin{tabular}[c]{@{}l@{}}Q: Who is an author?\\ Sample A: Jane Austen\end{tabular}                                                                                               & 370                 \\ 
+	\end{tabular}
+	\caption{Summary of the two question types in our study. Note that for retrieval ambiguity, any author is a valid response. }
+\end{table*}
+
+
+
+
+

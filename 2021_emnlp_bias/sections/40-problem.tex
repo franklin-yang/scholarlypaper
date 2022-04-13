@@ -1,0 +1,11 @@
+\section{Problem Statement}
+\label{sec:problem_statement}
+We define bias in QA formally and develop three bias metrics in section~\ref{sec:bias} based on this definition. 
+We consider the problem of answering questions, \bm{$q_{1} \cdots q_{n}$}, where a single question $q_{i}$ is a sequence of words, for example, the question $q$ might be "Who founded Company X?".
+We use a question answering (QA) system, $f(q_{i},c_{i})$, where $c_{i}$ is the context, which is either pre-determined, in the closed-domain scenario, or generated through a retriever function $g(x)$ that takes in a sequence of words and outputs a list of contexts, in the open-domain scenario.  One such context might be a string that says "Company X was founded by Sally and Timmy in 2011." 
+Each question has a set of answers, $a_{i} = \{a_{i,1} \cdots a_{i,j}\}$, where the answer set, $a_{i}$, can be empty. In the earlier example, the answer set might be $a_0 = \{ a_{01},a_{02} \} = $ \{"Sally","Timmy"\}.
+Evaluation is done by comparing $a_{i}$ to $f(a_{i},c_{i})$. 
+
+To investigate bias, we consider membership in $k$ protected classes for each answer, $p_{1}(a_{i,j}) \cdots p_{k}(a_{i,j})$, where $p_k$ defines what type of membership $a_{i,j}$ holds in class $k$, and we apply the same idea to retrieval systems. Concretely, we might set $k = 1$ and examine gender as the sole protected class.  Then $p_1(a_{01}) = p_1$("Sally") = female, $p_1(a_{02}) = p_1$("Timmy") = male.
+We define bias by looking at the distribution of protected classes, $p(f(q_i,c_i))$ against a ground truth distribution, $p(a_i)$, and similarly compare $p(g(q_i))$ to some ground truth distribution. For example, the model might only return "Sally", in which case $p(f(q_0,c_0)) = $1 female, 0 male, where as the ground truth $p(a_0) = $1 female, 1 male.
+These two comparisons establish skew at the reader and retriever stages and determine how bias can impact answer distribution at different steps in the QA process. 
