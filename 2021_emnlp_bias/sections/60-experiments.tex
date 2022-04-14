@@ -48,7 +48,28 @@ We find that recall for male and female names are similar for all three models, 
 This is potentially due to the simple nature of the questions; QA models were simply asked to perform reading comprehension rather than retrieval, which may limit the expression of model bias.
 Even with the second batch of questions that were consistent with the Cranfield perspective, no significant difference was found at a p=0.05 significance level. 
 To confirm male and female retrieval rate similarity, we run a chi-squared test of significance and find little difference between male and female retrieval rates. 
-We compare the relative span probabilities between male and female entities in the answer context.  Given a context and question, reader models assign to each token in the context two probabilities: the start score represents the probability the given token is the beginning of an answer, and the end score the probability the token is the end of the answer span.  We use these scores to compare the reader's probability of selecting and find the male and female spans.  We count the number of spans for which the male span score exceeds the female one.  We find that females outscore males in 88 question answer pairs, while men outscore females in the remaining 83 across 171 questions, a rate that suggests little evidence against the null hypothesis of a random coin flip for each question.  When examining the Manchester style questions, we have males outscoring females 73 to 70, again not indicative against the null hypothesis.
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.7]{\figfile{rplaced.png}}
+	\caption{Histogram of log odds ratio of male to female span probabilities for the gender replaced Cranfield Selectional Ambiguity datasets}
+		\label{fig:replaced}
+\end{figure*}
+
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.7]{\figfile{original.png}}
+	\caption{Histogram of log odds ratio of male to female span probabilities for the original Cranfield Selectional Ambiguity balanced subset}
+		\label{fig:orig}
+\end{figure*}
+
+\begin{figure*}[h]
+	\centering
+	\includegraphics[scale=0.9]{\figfile{cnmc.png}}
+	\caption{Which gender outranks the other in the selective ambiguity dataset}
+	\label{fig:ranks}
+\end{figure*}
+
+We compare the relative span probabilities between male and female entities in the answer context.  Given a context and question, reader models assign to each token in the context two probabilities: the start score represents the probability the given token is the beginning of an answer, and the end score the probability the token is the end of the answer span.  We use these scores to compare the reader's probability of selecting and find the male and female spans.  We count the number of spans for which the male span score exceeds the female one.  We find that females outscore males in 88 question answer pairs, while men outscore females in the remaining 83 across 171 questions, a rate that suggests little evidence against the null hypothesis of a random coin flip for each question.  When examining the Manchester style questions, we have males outscoring females 73 to 70, again not indicative against the null hypothesis. \ref{fig:ranks} The distribution of the odds ratios for the balanced subset of the original selectional dataset and for the entire dataset with balancing applied.\ref{fig:replaced} \ref{fig:orig} 
 
 \subsection{Retrieval Ambiguity}
 \begin{figure*}[h]
@@ -65,7 +86,7 @@ We compute the number of passages belonging to a male biography and likewise for
 We plot the eight lowest and highest gender disparities and find a significant gender skew by occupation aligning with common stereotypes of males and females~\cite{genderstereotype}. 
 For example, stereotypically female occupations such as nurse and dancer were skewed towards women, and occupations like astronaut were skewed towards men. 
 
-We run a chi-square goodness-of-fit test between the gender frequencies of the retriever and the gender frequencies of biographies in Wikipedia \cite{maher2018wikipedia} and find significance at the p=0.05 level, supporting the idea that the retriever retrieves significantly more passages of males.  Considering occupations individually, we find significant differences between the distribution of genders retrieved and those occurring in Wikidata, with a sample of 5 such occupations shown in Table 4.
+We run a chi-square goodness-of-fit test between the gender frequencies of the retriever and the gender frequencies of biographies in Wikipedia \cite{maher2018wikipedia} and find significance at the p=0.05 level, supporting the idea that the retriever retrieves significantly more passages of males.  Considering occupations individually, we find significant differences between the distribution of genders retrieved and those occurring in Wikidata, with a sample of 5 such occupations shown in Table \ref{tab:nodiversocc}.  These occupations showed no diversity in either the Wikidata distribution, the retriever results, or both.  \ref{fig:diffdist} shows a sample of three occupations for which diversity exists in both distributions, yet they still differ significantly.
 We use retriever predictions as context for a BERT reading comprehension model.
 Out of seventy questions, fifty-two responses were male, six were female, and twelve were gender-neutral, which is similar to the $17\%$ of Wikipedia biographies that are women~\cite{maher2018wikipedia}, giving evidence to the idea that retrievers propagate bias at a level more than what's present in the real world, while readers might not. 
 \nrcomment{What percent retrieved are female?}
@@ -76,32 +97,48 @@ We perform gender frequency analysis for occupations alone, with the occupations
 To perform more focused analysis, we then repeat the frequency analysis, but instead of considering, for example, the gender distribution of entities in a particular occupation, we examine the gender distribution for persons of a particular occupation and nationality combination.  We find significance at the p=0.05 level for multiple combinations, with a sample of 10 being displayed in Figure 2.
 
 
+
+
+
+
 \begin{figure*}[h]
 	\centering
 	\includegraphics[scale=0.7]{\figfile{unq.png}}
-	\caption{ These occupations resulted in significantly different gender distributions between the QANTA dataset and the retriever results.}
+	\caption{ These occupations resulted in significantly different gender distributions between Wikidata and the retriever results.}
+	\label{fig:diffdist}
 \end{figure*}
 
+\begin{table}[]
+	\begin{tabular}{l}
+
+occupation \\ \hline
+attendant  \\
+butcher\\
+carpenter \\
+cashier\\
+	\end{tabular}
+	\caption{\label{tab:nodiversocc} These occupations represent a sample of those that resulted in significantly different gender distributions between the Wikidata and the retriever results due to a lack of diversity}
+\end{table}
+
+\begin{table}[]
+	\begin{tabular}{ll}
+
+occupation & nationality\\ \hline
+author & Great Britain  \\
+poet & Spain\\
+leader & India \\
+justice &
+United States of America \\
+rapper & Trinidad and Tobago  \\
+	\end{tabular}
+	\caption{\label{tab:nationocc} These occupation and nationality combinations represent a sample of those that resulted in significantly different gender distributions between the QANTA dataset and the retriever results due to a lack of diversity}
+\end{table}
 
 \begin{figure*}[h]
 	\centering
 	\includegraphics[scale=0.7]{\figfile{qa.png}}
 	\caption{These occupations and nationality combinations represent a subsample of those that resulted in significantly different gender distributions between the QANTA dataset and the retriever results}
 \end{figure*}
-
-\begin{table}[]
-	\begin{tabular}{ll}
-		
-occupation &\begin{tabular}[c]{@{}l@{}} statistic\end{tabular} \\\hline
-		
-assistant & .04\\
-athlete & 34.255319148936174\\
-dancer & inf\\
-politician & inf\\
-astronaut & 94.0 \\
-	\end{tabular}
-	\caption{\label{tab:select} These occupations from the UNQOVER dataset represent a subsample of those that resulted in significantly different gender distributions between Wikidata and the Dense Passage Retriever results}
-\end{table}
 
 
 
